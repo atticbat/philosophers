@@ -6,60 +6,12 @@
 /*   By: khatlas <khatlas@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 13:04:25 by khatlas           #+#    #+#             */
-/*   Updated: 2022/11/03 12:26:02 by khatlas          ###   ########.fr       */
+/*   Updated: 2022/11/04 14:37:24 by khatlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-long long	get_time(void)
-{
-	struct timeval	time;
-	long long		ret;
-
-	gettimeofday(&time, NULL);
-	ret = (long long)time.tv_sec * 1000;
-	ret += (long long)time.tv_usec / 1000;
-	return (ret);
-}
-
-int	error_glossary(int code)
-{
-	static const char	*errors[4] = {ERR_1, ERR_2, ERR_3, ERR_4};
-
-	if (code <= 0)
-		return (0);
-	write (2, errors[code - 1], strlen(errors[code - 1]));
-	return (code);
-}
-
-bool	is_str_numeric(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] != '\0')
-	{
-		if (str[i] < '0' || str[i] > '9')
-			return (false);
-		i++;
-	}
-	return (true);
-}
-
-bool	are_args_numeric(int argc, char **argv)
-{
-	int	i;
-
-	i = 1;
-	while (i < argc)
-	{
-		if (!is_str_numeric(argv[i]))
-			return (false);
-		i++;
-	}
-	return (true);
-}
+#include <stdio.h>
 
 int	main(int argc, char **argv)
 {
@@ -67,17 +19,11 @@ int	main(int argc, char **argv)
 
 	if (argc != 5 && argc != 6)
 		return (error_glossary(USAGE));
-	if (!are_args_numeric(argc, argv))
-		return (error_glossary(NON_NUM));
-	gen.n_eat = atoi(argv[1]);
-	gen.n_philo = atoi(argv[2]);
-	gen.time_die = atoi(argv[3]);
-	gen.time_eat = atoi(argv[4]);
-	if (argc == 6)
-		gen.time_sleep = atoi(argv[5]);
-	else
-		gen.time_sleep = -1;
-	gen.start_time = get_time();
+	if (parse_input(argc, argv, &gen))
+		return (gen.err_code);
+	gen.start_time = get_timestamp();
+	if (gen.start_time == -1)
+		return (error_glossary(TIMESTAMP_FAIL));
 	gen.fork = malloc (sizeof (pthread_mutex_t) * gen.n_philo);
 	if (!gen.fork)
 		return (error_glossary(MEM_ALLOC));
