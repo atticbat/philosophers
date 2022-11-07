@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   time.h                                             :+:      :+:    :+:   */
+/*   thread_start.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: khatlas < khatlas@student.42heilbronn.d    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/04 14:31:59 by khatlas           #+#    #+#             */
-/*   Updated: 2022/11/07 15:40:46 by khatlas          ###   ########.fr       */
+/*   Created: 2022/11/07 15:05:55 by khatlas           #+#    #+#             */
+/*   Updated: 2022/11/07 15:06:43 by khatlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TIME_H
-# define TIME_H
+#ifndef THREAD_START_H
+# define THREAD_START_H
 
-long long	get_timestamp(void);
-void	    ft_sleep(int ms);
+void	*thread_start(void *data);
 
 #endif

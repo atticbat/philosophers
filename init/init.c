@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: khatlas <khatlas@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: khatlas < khatlas@student.42heilbronn.d    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 14:18:34 by khatlas           #+#    #+#             */
-/*   Updated: 2022/11/05 01:02:47 by khatlas          ###   ########.fr       */
+/*   Updated: 2022/11/07 15:57:23 by khatlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "data.h"
 #include "utilities.h"
 #include "error.h"
+#include "thread_start.h"
 #include <stdlib.h>
 
 bool	are_args_numeric(int argc, char **argv)
@@ -48,10 +49,10 @@ int	parse_input(int argc, char **argv, t_gen *gen)
 	return (0);
 }
 
-// #include <stdio.h>
 static int	init_philo(t_philo *philo, t_gen *gen, int id)
 {
 	int	left_fork;
+	int	i;
 
 	philo->id = id;
 	philo->constants = &gen->constants;
@@ -59,10 +60,15 @@ static int	init_philo(t_philo *philo, t_gen *gen, int id)
 	left_fork = id - 1;
 	if (left_fork < 0)
 		left_fork = gen->constants.n_philo + left_fork;
-	// printf("philo %d\tleft %d\tright %d\n", id, left_fork, id);
 	philo->left_fork = &gen->philo[left_fork].right_fork;
-	if (id == 0)
-		
+	philo->dead = false;
+	philo->death = &gen->death;
+	i = 0;
+	while (i < gen->constants.n_philo)
+	{
+		pthread_create(&gen->philo[i].thread, NULL, &thread_start, &gen->philo[i]);
+		i++;
+	}
 	return (0);
 }
 
@@ -73,18 +79,9 @@ int	init_philos(t_gen *gen)
 	gen->philo = malloc (sizeof(t_philo) * gen->constants.n_philo);
 	if (!gen->philo)
 	{
-		// free (gen->fork);
 		gen->err_code = MEM_ALLOC;
 		return (error_glossary(MEM_ALLOC));
 	}
-	// gen->threads = malloc(sizeof(pthread_t) * gen->constants.n_philo);
-	// if (!gen->threads)
-	// {
-	// 	// free (gen->fork);
-	// 	free (gen->philo);
-	// 	gen->err_code = MEM_ALLOC;
-	// 	return (error_glossary(MEM_ALLOC));
-	// }
 	i = 0;
 	while (i < gen->constants.n_philo)
 	{
@@ -96,18 +93,6 @@ int	init_philos(t_gen *gen)
 
 int	init_thread(t_gen *gen)
 {
-	// int	i;
-
-	// gen->fork = malloc (sizeof (pthread_mutex_t) * gen->constants.n_philo);
-	// if (!gen->fork)
-	// 	return (error_glossary(MEM_ALLOC));
-	// i = 0;
-	// while (i < gen->constants.n_philo)
-	// {
-	// 	if (pthread_mutex_init(&(gen->fork[i]), NULL) != 0)
-	// 		return (error_glossary(THREAD_INIT));
-	// 	i++;
-	// }
 	if (init_philos(gen))
 		return (gen->err_code);
 	return (0);
