@@ -25,4 +25,7 @@ fclean:		clean
 clean:
 	rm -rf _obj
 
--include $(OBJL.o=.d)
+re:			fclean all
+
+.PHONY: all clean fclean re
+-include $(OBJ:.o=.d)
