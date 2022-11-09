@@ -6,7 +6,7 @@
 /*   By: khatlas < khatlas@student.42heilbronn.d    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 14:25:10 by khatlas           #+#    #+#             */
-/*   Updated: 2022/11/07 18:40:31 by khatlas          ###   ########.fr       */
+/*   Updated: 2022/11/09 13:54:43 by khatlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,20 @@ typedef struct s_const
 	long long	start_time;
 }	t_const;
 
+typedef struct s_shared
+{
+	pthread_mutex_t	begin_m;
+	bool			begin;
+	pthread_mutex_t	death_m;
+	bool			death;
+	pthread_mutex_t	death2_m;
+	bool			death2;
+}	t_shared;
+
 typedef struct s_philo
 {
 	const t_const	*constants;
-	bool			dead;
+	t_shared		*shared;
 	int				id;
 	int				index;
 	long long		to_die;
@@ -39,16 +49,15 @@ typedef struct s_philo
 	int				times_eaten;
 	pthread_mutex_t	right_fork;
 	pthread_mutex_t	*left_fork;
-	pthread_mutex_t	*death;
 	pthread_t		thread;
 }	t_philo;
 
 typedef struct	s_gen
 {
-	t_const			constants;
-	pthread_mutex_t	death;
-	t_philo			*philo;
-	int				err_code;
+	t_shared	shared;
+	t_const		constants;
+	t_philo		*philo;
+	int			err_code;
 }	t_gen;
 
 int	parse_input(int argc, char **argv, t_gen *gen);

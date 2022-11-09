@@ -6,7 +6,7 @@
 /*   By: khatlas < khatlas@student.42heilbronn.d    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 14:18:34 by khatlas           #+#    #+#             */
-/*   Updated: 2022/11/07 15:57:23 by khatlas          ###   ########.fr       */
+/*   Updated: 2022/11/09 16:13:23 by khatlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ int	parse_input(int argc, char **argv, t_gen *gen)
 static int	init_philo(t_philo *philo, t_gen *gen, int id)
 {
 	int	left_fork;
-	int	i;
 
 	philo->id = id;
 	philo->constants = &gen->constants;
@@ -61,14 +60,7 @@ static int	init_philo(t_philo *philo, t_gen *gen, int id)
 	if (left_fork < 0)
 		left_fork = gen->constants.n_philo + left_fork;
 	philo->left_fork = &gen->philo[left_fork].right_fork;
-	philo->dead = false;
-	philo->death = &gen->death;
-	i = 0;
-	while (i < gen->constants.n_philo)
-	{
-		pthread_create(&gen->philo[i].thread, NULL, &thread_start, &gen->philo[i]);
-		i++;
-	}
+	philo->shared = &gen->shared;
 	return (0);
 }
 
@@ -76,6 +68,8 @@ int	init_philos(t_gen *gen)
 {
 	int	i;
 
+	gen->shared.death = false;
+	gen->shared.begin = false;
 	gen->philo = malloc (sizeof(t_philo) * gen->constants.n_philo);
 	if (!gen->philo)
 	{
@@ -88,6 +82,28 @@ int	init_philos(t_gen *gen)
 		init_philo(&gen->philo[i], gen, i);
 		i++;
 	}
+	pthread_mutex_init(&gen->shared.death_m, NULL);
+	pthread_mutex_init(&gen->shared.begin_m, NULL);
+	pthread_mutex_lock(&gen->shared.begin_m);
+	gen->shared.begin = true;
+	pthread_mutex_unlock(&gen->shared.begin_m);
+	i = 0;
+	while (i < gen->constants.n_philo)
+	{
+		pthread_create(&gen->philo[i].thread, NULL, &thread_start, &gen->philo[i]);
+		i++;
+		if (i == gen->constants.n_philo)
+			pthread_mutex_unlock(&gen->shared.begin_m);
+	}
+	i = 0;
+	while (i < gen->constants.n_philo)
+	{
+		pthread_join(gen->philo[i].thread, NULL);
+		i++;
+	}
+	pthread_mutex_destroy(&gen->shared.death_m);
+	// pthread_mutex_destroy(&gen->shared.death2_m);
+	pthread_mutex_destroy(&gen->shared.begin_m);
 	return (0);
 }
 

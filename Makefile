@@ -2,7 +2,7 @@
 
 VPATH	=	init src utilities
 
-SRC		=	main.c error.c init.c time.c string.c thread_start.c
+SRC		=	main.c error.c init.c time.c string.c thread_start.c nu_itoa.c
 OBJ		=	$(addprefix _obj/,$(notdir $(SRC:.c=.o)))
 NAME	=	philo
 CFLAGS	=	-Wall -Werror -Wextra
@@ -14,7 +14,7 @@ _obj:
 	mkdir _obj
 
 _obj/%.o:	%.c | _obj
-	cc $(CFLAGS) -c -MMD -MP $(IFLAGS) $< -o $@
+	cc $(CFLAGS) -c -MMD -MP $(IFLAGS) -pthread $< -o $@
 
 $(NAME):	$(OBJ)
 	cc $(CFLAGS) $^ -o $@
