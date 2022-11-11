@@ -6,7 +6,7 @@
 /*   By: khatlas < khatlas@student.42heilbronn.d    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 14:18:34 by khatlas           #+#    #+#             */
-/*   Updated: 2022/11/11 21:22:24 by khatlas          ###   ########.fr       */
+/*   Updated: 2022/11/11 22:29:33 by khatlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,13 @@ int	parse_input(int argc, char **argv, t_gen *gen)
 		return (error_glossary(NON_NUM));
 	}
 	gen->constants.n_philo = nu_atoi(argv[1]);
-	gen->constants.n_eat = nu_atoi(argv[2]);
-	gen->constants.time_die = nu_atoi(argv[3]);
-	gen->constants.time_eat = nu_atoi(argv[4]);
+	gen->constants.time_die = nu_atoi(argv[2]);
+	gen->constants.time_eat = nu_atoi(argv[3]);
+	gen->constants.time_sleep = nu_atoi(argv[4]);
 	if (argc == 6)
-		gen->constants.time_sleep = nu_atoi(argv[5]);
+		gen->constants.n_eat = nu_atoi(argv[5]);
 	else
-		gen->constants.time_sleep = -1;
+		gen->constants.n_eat = -1;
 	return (0);
 }
 
@@ -82,7 +82,9 @@ int	init_philos(t_gen *gen)
 		i++;
 	}
 	pthread_mutex_init(&gen->shared.death_m, NULL);
+	// pthread_mutex_init(&gen->shared.death2_m, NULL);
 	pthread_mutex_init(&gen->shared.begin_m, NULL);
+	// pthread_mutex_init(&gen->shared.starving_m, NULL);
 	pthread_mutex_lock(&gen->shared.begin_m);
 	i = 0;
 	while (i < gen->constants.n_philo)
@@ -99,7 +101,9 @@ int	init_philos(t_gen *gen)
 		i++;
 	}
 	pthread_mutex_destroy(&gen->shared.death_m);
+	// pthread_mutex_destroy(&gen->shared.death2_m);
 	pthread_mutex_destroy(&gen->shared.begin_m);
+	// pthread_mutex_destroy(&gen->shared.starving_m);
 	return (0);
 }
 
