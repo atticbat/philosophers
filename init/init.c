@@ -6,7 +6,7 @@
 /*   By: khatlas < khatlas@student.42heilbronn.d    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 14:18:34 by khatlas           #+#    #+#             */
-/*   Updated: 2022/11/09 16:13:23 by khatlas          ###   ########.fr       */
+/*   Updated: 2022/11/11 21:22:24 by khatlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ int	init_philos(t_gen *gen)
 	int	i;
 
 	gen->shared.death = false;
-	gen->shared.begin = false;
 	gen->philo = malloc (sizeof(t_philo) * gen->constants.n_philo);
 	if (!gen->philo)
 	{
@@ -85,8 +84,6 @@ int	init_philos(t_gen *gen)
 	pthread_mutex_init(&gen->shared.death_m, NULL);
 	pthread_mutex_init(&gen->shared.begin_m, NULL);
 	pthread_mutex_lock(&gen->shared.begin_m);
-	gen->shared.begin = true;
-	pthread_mutex_unlock(&gen->shared.begin_m);
 	i = 0;
 	while (i < gen->constants.n_philo)
 	{
@@ -102,7 +99,6 @@ int	init_philos(t_gen *gen)
 		i++;
 	}
 	pthread_mutex_destroy(&gen->shared.death_m);
-	// pthread_mutex_destroy(&gen->shared.death2_m);
 	pthread_mutex_destroy(&gen->shared.begin_m);
 	return (0);
 }

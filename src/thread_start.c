@@ -6,7 +6,7 @@
 /*   By: khatlas < khatlas@student.42heilbronn.d    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 15:05:20 by khatlas           #+#    #+#             */
-/*   Updated: 2022/11/09 16:12:22 by khatlas          ###   ########.fr       */
+/*   Updated: 2022/11/11 21:21:56 by khatlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,24 +20,24 @@ void	*thread_start(void *data)
 
 	philo = (t_philo *) data;
 	philo->index = 0;
-	while (!philo->shared->begin)
-		ft_sleep(1);
+	pthread_mutex_lock(&philo->shared->begin_m);
+	pthread_mutex_unlock(&philo->shared->begin_m);
+	philo->to_die = get_timestamp() + philo->constants->time_die;
 	while (1)
 	{
-		philo->index++;
-		if (philo->index > 5)
+		long long	timestamp = get_timestamp();
+		// philo->index++;
+		if (timestamp > philo->to_die)
 		{
 			pthread_mutex_lock(&philo->shared->death_m);
 			if (!philo->shared->death)
 			{
 				philo->shared->death = true;
-				printf("philo %d has died.", philo->id);
+				printf("ms: %lld\tphilo %d has died.", philo->to_die, philo->id);
 			}
 			pthread_mutex_unlock(&philo->shared->death_m);
 			break ;
 		}
-		if (philo->shared->death)
-			break ;
 	}
 	return (NULL);
 }

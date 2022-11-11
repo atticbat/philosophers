@@ -6,7 +6,7 @@
 /*   By: khatlas < khatlas@student.42heilbronn.d    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 14:25:10 by khatlas           #+#    #+#             */
-/*   Updated: 2022/11/09 13:54:43 by khatlas          ###   ########.fr       */
+/*   Updated: 2022/11/11 21:22:52 by khatlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ typedef struct s_const
 typedef struct s_shared
 {
 	pthread_mutex_t	begin_m;
-	bool			begin;
 	pthread_mutex_t	death_m;
 	bool			death;
 	pthread_mutex_t	death2_m;

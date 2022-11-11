@@ -5,7 +5,7 @@ VPATH	=	init src utilities
 SRC		=	main.c error.c init.c time.c string.c thread_start.c nu_itoa.c
 OBJ		=	$(addprefix _obj/,$(notdir $(SRC:.c=.o)))
 NAME	=	philo
-CFLAGS	=	-Wall -Werror -Wextra
+CFLAGS	=	-Wall -Werror -Wextra -fsanitize=thread
 IFLAGS	=	-I ./includes/
 
 all:		$(NAME)
