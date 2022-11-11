@@ -6,7 +6,7 @@
 /*   By: khatlas < khatlas@student.42heilbronn.d    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 15:05:20 by khatlas           #+#    #+#             */
-/*   Updated: 2022/11/11 22:34:14 by khatlas          ###   ########.fr       */
+/*   Updated: 2022/11/11 22:45:40 by khatlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,11 @@ void	*thread_start(void *data)
 	philo->to_die = get_timestamp() + philo->constants->time_die;
 	philo->to_eat = get_timestamp() + philo->constants->time_eat;
 	philo->to_sleep = get_timestamp() + philo->constants->time_sleep;
+	philo->times_eaten = 0;
 	while (1)
 	{
 		timestamp = get_timestamp();
-		if (timestamp > philo->to_die)
+		if (timestamp >= philo->to_die || (philo->constants->n_eat != -1 && philo->times_eaten >= philo->constants->n_eat))
 		{
 			pthread_mutex_lock(&philo->shared->death_m);
 			if (!philo->shared->death)
@@ -39,17 +40,18 @@ void	*thread_start(void *data)
 			pthread_mutex_unlock(&philo->shared->death_m);
 			break ;
 		}
-		else if (timestamp > philo->to_eat)
+		else if (timestamp >= philo->to_eat)
 		{
 			pthread_mutex_lock(philo->left_fork);
 			pthread_mutex_lock(&philo->right_fork);
 			philo->to_die = timestamp + philo->constants->time_die;
 			philo->to_eat = get_timestamp() + philo->constants->time_eat;
+			philo->times_eaten++;
 			printf("ms: %lld\tphilo %d has eaten.\n", timestamp, philo->id);
 			pthread_mutex_unlock(philo->left_fork);
 			pthread_mutex_unlock(&philo->right_fork);
 		}
-		else if (timestamp > philo->to_sleep)
+		else if (timestamp >= philo->to_sleep)
 		{
 			printf("ms: %lld\tphilo %d is sleeping.\n", timestamp, philo->id);
 			philo->to_sleep = get_timestamp() + philo->constants->time_sleep;
@@ -58,14 +60,8 @@ void	*thread_start(void *data)
 		else
 		{
 			printf("ms: %lld\tphilo %d is thinking.\n", timestamp, philo->id);
+			ft_sleep((philo->to_sleep - timestamp));
 		}
-		// pthread_mutex_lock(&philo->shared->death2_m);
-		// if (philo->shared->death)
-		// {
-		// 	pthread_mutex_unlock(&philo->shared->death2_m);
-		// 	break ;
-		// }
-		// pthread_mutex_unlock(&philo->shared->death2_m);
 	}
 	return (NULL);
 }
