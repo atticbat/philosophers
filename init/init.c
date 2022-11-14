@@ -6,7 +6,7 @@
 /*   By: khatlas < khatlas@student.42heilbronn.d    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 14:18:34 by khatlas           #+#    #+#             */
-/*   Updated: 2022/11/11 22:29:33 by khatlas          ###   ########.fr       */
+/*   Updated: 2022/11/14 16:30:02 by khatlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "error.h"
 #include "thread_start.h"
 #include <stdlib.h>
+#include <stdbool.h>
 
 bool	are_args_numeric(int argc, char **argv)
 {
@@ -82,9 +83,8 @@ int	init_philos(t_gen *gen)
 		i++;
 	}
 	pthread_mutex_init(&gen->shared.death_m, NULL);
-	// pthread_mutex_init(&gen->shared.death2_m, NULL);
 	pthread_mutex_init(&gen->shared.begin_m, NULL);
-	// pthread_mutex_init(&gen->shared.starving_m, NULL);
+
 	pthread_mutex_lock(&gen->shared.begin_m);
 	i = 0;
 	while (i < gen->constants.n_philo)
@@ -101,9 +101,7 @@ int	init_philos(t_gen *gen)
 		i++;
 	}
 	pthread_mutex_destroy(&gen->shared.death_m);
-	// pthread_mutex_destroy(&gen->shared.death2_m);
 	pthread_mutex_destroy(&gen->shared.begin_m);
-	// pthread_mutex_destroy(&gen->shared.starving_m);
 	return (0);
 }
 

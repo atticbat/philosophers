@@ -6,7 +6,7 @@
 /*   By: khatlas < khatlas@student.42heilbronn.d    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 14:25:10 by khatlas           #+#    #+#             */
-/*   Updated: 2022/11/11 21:49:11 by khatlas          ###   ########.fr       */
+/*   Updated: 2022/11/14 15:35:49 by khatlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,6 @@ typedef struct s_shared
 	pthread_mutex_t	begin_m;
 	pthread_mutex_t	death_m;
 	bool			death;
-	pthread_mutex_t	death2_m;
-	// long long		starving;
-	// int				starving_id;
-	// pthread_mutex_t	starving_m;
 }	t_shared;
 
 typedef struct s_philo
@@ -44,8 +40,6 @@ typedef struct s_philo
 	t_shared		*shared;
 	int				id;
 	long long		to_die;
-	long long		to_eat;
-	long long		to_sleep;
 	int				times_eaten;
 	pthread_mutex_t	right_fork;
 	pthread_mutex_t	*left_fork;
