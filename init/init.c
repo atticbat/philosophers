@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: khatlas < khatlas@student.42heilbronn.d    +#+  +:+       +#+        */
+/*   By: khatlas <khatlas@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 14:18:34 by khatlas           #+#    #+#             */
-/*   Updated: 2022/11/14 16:30:02 by khatlas          ###   ########.fr       */
+/*   Updated: 2022/11/15 22:23:27 by khatlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ int	init_philos(t_gen *gen)
 	int	i;
 
 	gen->shared.death = false;
+	gen->shared.eaten = 0;
 	gen->philo = malloc (sizeof(t_philo) * gen->constants.n_philo);
 	if (!gen->philo)
 	{
@@ -83,8 +84,8 @@ int	init_philos(t_gen *gen)
 		i++;
 	}
 	pthread_mutex_init(&gen->shared.death_m, NULL);
+	pthread_mutex_init(&gen->shared.eaten_m, NULL);
 	pthread_mutex_init(&gen->shared.begin_m, NULL);
-
 	pthread_mutex_lock(&gen->shared.begin_m);
 	i = 0;
 	while (i < gen->constants.n_philo)
@@ -101,6 +102,7 @@ int	init_philos(t_gen *gen)
 		i++;
 	}
 	pthread_mutex_destroy(&gen->shared.death_m);
+	pthread_mutex_destroy(&gen->shared.eaten_m);
 	pthread_mutex_destroy(&gen->shared.begin_m);
 	return (0);
 }

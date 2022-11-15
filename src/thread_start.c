@@ -6,7 +6,7 @@
 /*   By: khatlas <khatlas@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 15:05:20 by khatlas           #+#    #+#             */
-/*   Updated: 2022/11/15 21:14:19 by khatlas          ###   ########.fr       */
+/*   Updated: 2022/11/15 22:35:37 by khatlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,6 @@
 #include "thread_start.h"
 #include <stdio.h>
 #include <stdbool.h>
-
-// bool	check_death(t_philo *philo)
-// {
-// 	if (philo->shared->death)
-// 	{
-// 		return (true);
-// 	}
-// 	return (false);
-// }
 
 bool	print_message(t_philo *philo, int mode)
 {
@@ -50,6 +41,22 @@ void	death(t_philo *philo)
 	pthread_mutex_unlock(&philo->shared->death_m);
 }
 
+void	death_in_sleep(t_philo *philo, long long buffer, bool normal)
+{
+	ft_sleep(buffer);
+	death(philo);
+	if (normal)
+	{
+		pthread_mutex_unlock(&philo->right_fork);
+		pthread_mutex_unlock(philo->left_fork);
+	}
+	else
+	{
+		pthread_mutex_unlock(philo->left_fork);
+		pthread_mutex_unlock(&philo->right_fork);
+	}
+}
+
 bool	take_forks_last(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->right_fork);
@@ -74,10 +81,7 @@ bool	take_forks_last(t_philo *philo)
 	long long	buffer = get_timestamp() - philo->to_die;
 	if (buffer >= philo->constants->time_eat)
 	{
-		ft_sleep(buffer);
-		death(philo);
-		pthread_mutex_unlock(philo->left_fork);
-		pthread_mutex_unlock(&philo->right_fork);
+		death_in_sleep(philo, buffer, false);
 		return (true);
 	}
 	philo->to_die = get_timestamp() + philo->constants->time_die;
@@ -112,10 +116,7 @@ bool	take_forks_normal(t_philo *philo)
 	long long	buffer = get_timestamp() - philo->to_die;
 	if (buffer >= philo->constants->time_eat)
 	{
-		ft_sleep(buffer);
-		death(philo);
-		pthread_mutex_unlock(&philo->right_fork);
-		pthread_mutex_unlock(philo->left_fork);
+		death_in_sleep(philo, buffer, true);
 		return (true);
 	}
 	philo->to_die = get_timestamp() + philo->constants->time_die;
@@ -125,6 +126,7 @@ bool	take_forks_normal(t_philo *philo)
 	pthread_mutex_unlock(philo->left_fork);
 	return (false);
 }
+
 void	*thread_start(void *data)
 {
 	t_philo	*philo;
@@ -148,8 +150,28 @@ void	*thread_start(void *data)
 			death(philo);
 			break ;
 		}
-		else if (philo->constants->n_eat != -1 && philo->times_eaten >= philo->constants->n_eat)
-			break ;
+		else if (philo->constants->n_eat != -1 && philo->times_eaten == philo->constants->n_eat)
+		{
+			pthread_mutex_lock(&philo->shared->eaten_m);
+			philo->shared->eaten++;
+			if (philo->shared->eaten == philo->constants->n_philo)
+			{
+				pthread_mutex_unlock(&philo->shared->eaten_m);
+				break ;
+			}
+			pthread_mutex_unlock(&philo->shared->eaten_m);
+		}
+		else if (philo->constants->n_eat != -1) 
+		{
+			pthread_mutex_lock(&philo->shared->eaten_m);
+			if (philo->shared->eaten == philo->constants->n_philo)
+			{
+				pthread_mutex_unlock(&philo->shared->eaten_m);
+				break ;
+			}
+			pthread_mutex_unlock(&philo->shared->eaten_m);
+
+		}
 		if (philo->id == philo->constants->n_philo - 1)
 		{
 			if (take_forks_last(philo))

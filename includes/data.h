@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: khatlas < khatlas@student.42heilbronn.d    +#+  +:+       +#+        */
+/*   By: khatlas <khatlas@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 14:25:10 by khatlas           #+#    #+#             */
-/*   Updated: 2022/11/14 15:35:49 by khatlas          ###   ########.fr       */
+/*   Updated: 2022/11/15 22:22:38 by khatlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ typedef struct s_shared
 	pthread_mutex_t	begin_m;
 	pthread_mutex_t	death_m;
 	bool			death;
+	pthread_mutex_t	eaten_m;
+	int				eaten;
 }	t_shared;
 
 typedef struct s_philo
