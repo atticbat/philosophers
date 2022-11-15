@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: khatlas < khatlas@student.42heilbronn.d    +#+  +:+       +#+        */
+/*   By: khatlas <khatlas@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 13:04:25 by khatlas           #+#    #+#             */
-/*   Updated: 2022/11/14 16:48:34 by khatlas          ###   ########.fr       */
+/*   Updated: 2022/11/15 19:33:27 by khatlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,32 +31,5 @@ int	main(int argc, char **argv)
 		return (error_glossary(TIMESTAMP_FAIL));
 	init_thread(&gen);
 	free (gen.philo);
-	// int	i = 0;
-	// ft_sleep(10000);
-	// while (!gen.philo[i].shared.dead)
-	// {
-	// 	i++;
-	// 	if (i >= gen.constants.n_philo)
-	// 		i = 0;
-	// }
-	// while (!gen.philo[i].dead)
-	// {
-	// 	ft_sleep(20);
-	// 	i++;
-	// }
-	// i = 0;
-	// void	*res = NULL;
-	// while (i < gen.constants.n_philo)
-	// {
-	// 	pthread_join(gen.philo[i].thread, &res);
-	// 	if (gen.philo[i].dead)
-	// 		printf("res: %s\n", (char *) res);
-	// 	if (res)
-	// 	{
-	// 		free (res);
-	// 		res = NULL;
-	// 	}
-	// 	i++;
-	// }
 	return (0);
 }
