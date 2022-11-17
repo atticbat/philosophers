@@ -6,7 +6,7 @@
 /*   By: khatlas < khatlas@student.42heilbronn.d    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 15:05:20 by khatlas           #+#    #+#             */
-/*   Updated: 2022/11/17 23:31:29 by khatlas          ###   ########.fr       */
+/*   Updated: 2022/11/17 23:32:27 by khatlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ bool	take_forks_last(t_philo *philo)
 	long long	buffer = philo->to_die - get_timestamp(); 
 	if (buffer < philo->constants->time_eat)
 	{
-		// printf("\nBUFFER:\t\t\t%lld\n\n", buffer);
 		death_in_sleep(philo, buffer, false);
 		return (true);
 	}
@@ -117,8 +116,6 @@ bool	take_forks_normal(t_philo *philo)
 	long long	buffer = philo->to_die - get_timestamp(); 
 	if (buffer < philo->constants->time_eat)
 	{
-		// printf("\nconstants:\nnum_philo:\t%d\ntime_die:\t%d\ntime_eat:\t%d\ntime_sleep:\t%d\nnum_eat:\t%d\n\n", philo->constants->n_philo, philo->constants->time_die, philo->constants->time_eat, philo->constants->time_sleep, philo->constants->n_eat);
-		// printf("\nBUFFER:\t%lld\t<\t%d\n\n", buffer, philo->constants->time_eat);
 		death_in_sleep(philo, buffer, true);
 		return (true);
 	}
@@ -139,11 +136,6 @@ void	*thread_start(void *data)
 	pthread_mutex_unlock(&philo->shared->begin_m);
 	philo->to_die = get_timestamp() + philo->constants->time_die;
 	philo->times_eaten = 0;
-	// if (philo->id == 3)
-	// {
-	// 	printf("\nbegin: till die: %lld\n\n", philo->to_die - get_timestamp());
-	// 	printf("\nconstants:\nnum_philo:\t%d\ntime_die:\t%d\ntime_eat:\t%d\ntime_sleep:\t%d\nnum_eat:\t%d\n\n", philo->constants->n_philo, philo->constants->time_die, philo->constants->time_eat, philo->constants->time_sleep, philo->constants->n_eat);
-	// }
 	if (philo->id % 2 == 0)
 	{
 		if (print_message(philo, THINK))
@@ -159,8 +151,6 @@ void	*thread_start(void *data)
 			break ;
 		}
 		pthread_mutex_unlock(&philo->shared->death_m);
-		// if (philo->id == 3)
-		// 	printf("\nbefore death check: till die: %lld\n\n", philo->to_die - get_timestamp());
 		if (get_timestamp() >= philo->to_die)
 		{
 			death(philo);
@@ -187,10 +177,6 @@ void	*thread_start(void *data)
 			}
 			pthread_mutex_unlock(&philo->shared->eaten_m);
 		}
-		// if (philo->id == 3)
-		// 	printf("\nbefore eat: till die: %lld\n\n", philo->to_die - get_timestamp());
-
-///take forks
 		if (philo->id == philo->constants->n_philo - 1)
 		{
 			if (take_forks_last(philo))
@@ -198,29 +184,18 @@ void	*thread_start(void *data)
 		}
 		else if (take_forks_normal(philo))
 			break ;
-
-		// if (philo->id == 3)
-		// 	printf("\nbefore sleep: till die: %lld\n\n", philo->to_die - get_timestamp());
-//sleep
 		if (print_message(philo, SLEEP))
 			break ;
 		long long	buffer = philo->to_die - get_timestamp();
 		if (buffer <= philo->constants->time_sleep)
 		{
 			ft_sleep(buffer);
-			// printf("\nBUFFER:\t%lld\t<=\t%d\n\n", buffer, philo->constants->time_sleep);
 			death(philo);
 			break ;
 		}
 		ft_sleep(philo->constants->time_sleep);
-		// if (philo->id == 3)
-		// 	printf("\nbefore think: till die: %lld\n\n", philo->to_die - get_timestamp());
-
-//think
 		if (print_message(philo, THINK))
 			break ;
-		// if (philo->id == 3)
-		// 	printf("\nbefore next: till die: %lld\n\n", philo->to_die - get_timestamp());
 	}
 	return (NULL);
 }
