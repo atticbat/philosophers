@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: khatlas <khatlas@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: khatlas < khatlas@student.42heilbronn.d    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 14:25:10 by khatlas           #+#    #+#             */
-/*   Updated: 2022/11/15 22:22:38 by khatlas          ###   ########.fr       */
+/*   Updated: 2022/11/20 00:50:04 by khatlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ typedef struct s_philo
 	pthread_t		thread;
 }	t_philo;
 
-typedef struct	s_gen
+typedef struct s_gen
 {
 	t_shared	shared;
 	t_const		constants;

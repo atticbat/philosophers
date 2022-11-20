@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: khatlas <khatlas@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: khatlas < khatlas@student.42heilbronn.d    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 14:18:34 by khatlas           #+#    #+#             */
-/*   Updated: 2022/11/15 22:23:27 by khatlas          ###   ########.fr       */
+/*   Updated: 2022/11/20 00:50:32 by khatlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,28 +69,12 @@ int	init_philos(t_gen *gen)
 {
 	int	i;
 
-	gen->shared.death = false;
-	gen->shared.eaten = 0;
-	gen->philo = malloc (sizeof(t_philo) * gen->constants.n_philo);
-	if (!gen->philo)
-	{
-		gen->err_code = MEM_ALLOC;
-		return (error_glossary(MEM_ALLOC));
-	}
-	i = 0;
-	while (i < gen->constants.n_philo)
-	{
-		init_philo(&gen->philo[i], gen, i);
-		i++;
-	}
-	pthread_mutex_init(&gen->shared.death_m, NULL);
-	pthread_mutex_init(&gen->shared.eaten_m, NULL);
-	pthread_mutex_init(&gen->shared.begin_m, NULL);
 	pthread_mutex_lock(&gen->shared.begin_m);
 	i = 0;
 	while (i < gen->constants.n_philo)
 	{
-		pthread_create(&gen->philo[i].thread, NULL, &thread_start, &gen->philo[i]);
+		pthread_create(&gen->philo[i].thread, NULL, &thread_start,
+			&gen->philo[i]);
 		i++;
 		if (i == gen->constants.n_philo)
 			pthread_mutex_unlock(&gen->shared.begin_m);
@@ -109,6 +93,25 @@ int	init_philos(t_gen *gen)
 
 int	init_thread(t_gen *gen)
 {
+	int	i;
+
+	gen->shared.death = false;
+	gen->shared.eaten = 0;
+	gen->philo = malloc (sizeof(t_philo) * gen->constants.n_philo);
+	if (!gen->philo)
+	{
+		gen->err_code = MEM_ALLOC;
+		return (error_glossary(MEM_ALLOC));
+	}
+	i = 0;
+	while (i < gen->constants.n_philo)
+	{
+		init_philo(&gen->philo[i], gen, i);
+		i++;
+	}
+	pthread_mutex_init(&gen->shared.death_m, NULL);
+	pthread_mutex_init(&gen->shared.eaten_m, NULL);
+	pthread_mutex_init(&gen->shared.begin_m, NULL);
 	if (init_philos(gen))
 		return (gen->err_code);
 	return (0);

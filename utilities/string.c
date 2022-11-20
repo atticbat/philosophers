@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   string.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: khatlas <khatlas@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: khatlas < khatlas@student.42heilbronn.d    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 14:43:06 by khatlas           #+#    #+#             */
-/*   Updated: 2022/11/04 15:00:45 by khatlas          ###   ########.fr       */
+/*   Updated: 2022/11/20 01:47:44 by khatlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	nu_atoi(const char *str)
 			negate = negate * -1;
 		str++;
 	}
-	while (*str >= '0' && *str <='9')
+	while (*str >= '0' && *str <= '9')
 	{
 		total = total * 10 + (*str - 48);
 		str++;

@@ -6,7 +6,7 @@
 /*   By: khatlas < khatlas@student.42heilbronn.d    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 14:33:12 by khatlas           #+#    #+#             */
-/*   Updated: 2022/11/14 16:05:27 by khatlas          ###   ########.fr       */
+/*   Updated: 2022/11/20 01:47:53 by khatlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,8 @@ long long	get_timestamp(void)
 
 void	ft_sleep(int ms)
 {
-	// long long	timestamp;
 	long long	goal;
 
-	// timestamp = get_timestamp();
 	goal = get_timestamp() + ms;
 	while (get_timestamp() < goal)
 	{
