@@ -1,6 +1,6 @@
 # -*- MakeFile -*-
 
-VPATH	=	init src utilities
+VPATH	=	src utilities
 
 SRC		=	main.c glossary.c init.c time.c string.c thread_start.c nu_itoa.c \
 			take_forks.c death.c

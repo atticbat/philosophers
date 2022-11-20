@@ -6,7 +6,7 @@
 /*   By: khatlas < khatlas@student.42heilbronn.d    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 15:05:20 by khatlas           #+#    #+#             */
-/*   Updated: 2022/11/20 02:09:30 by khatlas          ###   ########.fr       */
+/*   Updated: 2022/11/20 02:40:47 by khatlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,10 @@ void	*thread_start(void *data)
 	{
 		ft_sleep(philo->constants->time_die);
 		death(philo);
+		return (NULL);
+	}
+	else if (philo->constants->n_eat == 0)
+	{
 		return (NULL);
 	}
 	philo->to_die = get_timestamp() + philo->constants->time_die;
