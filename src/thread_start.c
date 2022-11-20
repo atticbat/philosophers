@@ -6,7 +6,7 @@
 /*   By: khatlas < khatlas@student.42heilbronn.d    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 15:05:20 by khatlas           #+#    #+#             */
-/*   Updated: 2022/11/20 01:50:49 by khatlas          ###   ########.fr       */
+/*   Updated: 2022/11/20 02:09:30 by khatlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,10 +96,16 @@ void	*thread_start(void *data)
 	philo = (t_philo *) data;
 	pthread_mutex_lock(&philo->shared->begin_m);
 	pthread_mutex_unlock(&philo->shared->begin_m);
+	if (philo->constants->n_philo == 1)
+	{
+		ft_sleep(philo->constants->time_die);
+		death(philo);
+		return (NULL);
+	}
 	philo->to_die = get_timestamp() + philo->constants->time_die;
 	philo->times_eaten = 0;
 	if (philo->id % 2 == 0)
-		ft_sleep(25);
+		ft_sleep(philo->constants->time_eat);
 	while (!logic_loop(philo))
 		;
 	return (NULL);
