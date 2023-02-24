@@ -6,7 +6,7 @@
 /*   By: khatlas < khatlas@student.42heilbronn.d    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 23:54:00 by khatlas           #+#    #+#             */
-/*   Updated: 2022/11/20 01:45:32 by khatlas          ###   ########.fr       */
+/*   Updated: 2023/02/24 11:51:15 by khatlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,9 +102,12 @@ static bool	eat(t_philo *philo, bool normal)
 
 bool	take_forks(t_philo *philo, bool normal)
 {
-	take_first_fork(philo, normal);
-	take_second_fork(philo, normal);
-	eat(philo, normal);
+	if (take_first_fork(philo, normal))
+		return (true);
+	if (take_second_fork(philo, normal))
+		return (true);
+	if (eat(philo, normal))
+		return (true);
 	if (normal)
 	{
 		pthread_mutex_unlock(&philo->right_fork);

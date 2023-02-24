@@ -6,12 +6,11 @@
 /*   By: khatlas < khatlas@student.42heilbronn.d    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 13:04:25 by khatlas           #+#    #+#             */
-/*   Updated: 2022/11/20 01:39:42 by khatlas          ###   ########.fr       */
+/*   Updated: 2023/02/24 11:52:13 by khatlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "data.h"
-#include "philo.h"
 #include "time.h"
 #include "error.h"
 #include <stdio.h>
